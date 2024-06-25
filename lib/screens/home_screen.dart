@@ -12,11 +12,14 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   List? popularBooks;
-  readData() {
-    DefaultAssetBundle.of(context)
-        .loadString('lib/json/popularBooks')
+  ScrollController? _scrollController;
+  TabController? _tabController;
+  readData() async {
+    await DefaultAssetBundle.of(context)
+        .loadString('lib/json/popularBooks.json')
         .then((value) {
       setState(() {
         popularBooks = json.decode(value);
@@ -27,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _scrollController = ScrollController();
     readData();
   }
 
@@ -90,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: MediaQuery.of(context).size.width,
                       height: 180,
                       child: PageView.builder(
-                          itemCount: popularBooks?.length??0,
+                          itemCount: popularBooks?.length ?? 0,
                           controller: PageController(viewportFraction: 0.8),
                           itemBuilder: (ctx, index) {
                             return Container(
@@ -100,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(15),
                                 image: DecorationImage(
                                   image:
-                                      AssetImage('lib/assets/images/pic-8.png'),
+                                      AssetImage(popularBooks?[index]["img"]),
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -110,6 +115,123 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ]),
               ),
+              Expanded(
+                  child: NestedScrollView(
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    Material(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                        ),
+                        title: Text('Content'),
+                      ),
+                    ),
+                    Material(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                        ),
+                        title: Text('Content'),
+                      ),
+                    ),
+                    Material(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                        ),
+                        title: Text('Content'),
+                      ),
+                    ),
+                  ],
+                ),
+                controller: _scrollController,
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    SliverAppBar(
+                      bottom: PreferredSize(
+                        preferredSize: Size.fromHeight(50),
+                        child: Container(
+                          margin: EdgeInsets.all(0),
+                          child: TabBar(
+                            tabs: [
+                              Container(
+                                width: 120,
+                                height: 50,
+                                child: Text(
+                                  'New',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.menu1Color,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.3),
+                                        blurRadius: 7,
+                                        offset: Offset(0, 0),
+                                      )
+                                    ]),
+                              ),
+                              Container(
+                                width: 120,
+                                height: 50,
+                                child: Text(
+                                  'New',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.menu2Color,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.3),
+                                        blurRadius: 7,
+                                        offset: Offset(0, 0),
+                                      )
+                                    ]),
+                              ),
+                              Container(
+                                width: 120,
+                                height: 50,
+                                child: Text(
+                                  'New',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.menu3Color,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.3),
+                                        blurRadius: 7,
+                                        offset: Offset(0, 0),
+                                      )
+                                    ]),
+                              ),
+                            ],
+                            indicatorPadding: EdgeInsets.all(0),
+                            indicatorSize: TabBarIndicatorSize.label,
+                            controller: _tabController,
+                            labelPadding: EdgeInsets.all(0),
+                            isScrollable: true,
+                            indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      blurRadius: 7,
+                                      offset: Offset(0, 0))
+                                ]),
+                          ),
+                        ),
+                      ),
+                      pinned: true,
+                    )
+                  ];
+                },
+              ))
             ],
           ),
         ),
