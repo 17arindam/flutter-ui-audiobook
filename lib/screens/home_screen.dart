@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:audiobook_app_ui/widgets/app_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:audiobook_app_ui/assets/app_colors.dart' as AppColors;
@@ -120,14 +121,23 @@ class _HomeScreenState extends State<HomeScreen>
                 body: TabBarView(
                   controller: _tabController,
                   children: [
-                    Material(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.grey,
+                    ListView.builder(itemBuilder: (ctx, index) {
+                      return Container(
+                        margin: EdgeInsets.only(
+                            left: 20, right: 20, top: 10, bottom: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 2,
+                                  offset: Offset(0, 0),
+                                  color: Colors.grey.withOpacity(0.2)
+                                )
+                              ]),
                         ),
-                        title: Text('Content'),
-                      ),
-                    ),
+                      );
+                    }),
                     Material(
                       child: ListTile(
                         leading: CircleAvatar(
@@ -150,71 +160,24 @@ class _HomeScreenState extends State<HomeScreen>
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
+                      backgroundColor: AppColors.sliverBackground,
                       bottom: PreferredSize(
                         preferredSize: Size.fromHeight(50),
                         child: Container(
-                          margin: EdgeInsets.all(0),
+                          margin: EdgeInsets.only(bottom: 20, left: 10),
                           child: TabBar(
                             tabs: [
-                              Container(
-                                width: 120,
-                                height: 50,
-                                child: Text(
-                                  'New',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.menu1Color,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.3),
-                                        blurRadius: 7,
-                                        offset: Offset(0, 0),
-                                      )
-                                    ]),
-                              ),
-                              Container(
-                                width: 120,
-                                height: 50,
-                                child: Text(
-                                  'New',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.menu2Color,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.3),
-                                        blurRadius: 7,
-                                        offset: Offset(0, 0),
-                                      )
-                                    ]),
-                              ),
-                              Container(
-                                width: 120,
-                                height: 50,
-                                child: Text(
-                                  'New',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                decoration: BoxDecoration(
+                              AppTabs(color: AppColors.menu1Color, text: 'New'),
+                              AppTabs(
+                                  color: AppColors.menu2Color, text: 'Popular'),
+                              AppTabs(
                                   color: AppColors.menu3Color,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.3),
-                                        blurRadius: 7,
-                                        offset: Offset(0, 0),
-                                      )
-                                    ]),
-                              ),
+                                  text: 'Trending'),
                             ],
                             indicatorPadding: EdgeInsets.all(0),
                             indicatorSize: TabBarIndicatorSize.label,
                             controller: _tabController,
-                            labelPadding: EdgeInsets.all(0),
+                            labelPadding: EdgeInsets.only(right: 10),
                             isScrollable: true,
                             indicator: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
