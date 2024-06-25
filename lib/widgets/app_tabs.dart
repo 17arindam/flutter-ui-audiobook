@@ -24,7 +24,8 @@ class AppTabs extends StatelessWidget {
               color: Colors.grey.withOpacity(0.3),
               blurRadius: 7,
               offset: Offset(0, 0),
-            )
+            ),
+            
           ]),
     );
   }

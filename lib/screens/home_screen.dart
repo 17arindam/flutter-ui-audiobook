@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   List? popularBooks;
+  List? books;
   ScrollController? _scrollController;
   TabController? _tabController;
   readData() async {
@@ -24,6 +25,13 @@ class _HomeScreenState extends State<HomeScreen>
         .then((value) {
       setState(() {
         popularBooks = json.decode(value);
+      });
+    });
+    await DefaultAssetBundle.of(context)
+        .loadString('lib/json/books.json')
+        .then((value) {
+      setState(() {
+        books = json.decode(value);
       });
     });
   }
@@ -121,20 +129,33 @@ class _HomeScreenState extends State<HomeScreen>
                 body: TabBarView(
                   controller: _tabController,
                   children: [
-                    ListView.builder(itemBuilder: (ctx, index) {
+                    ListView.builder(itemCount: books==null?0:books?.length,itemBuilder: (ctx, index) {
+                      
                       return Container(
                         margin: EdgeInsets.only(
                             left: 20, right: 20, top: 10, bottom: 10),
                         child: Container(
+                          
                           decoration: BoxDecoration(
+                            color: AppColors.tabVarViewColor,
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
-                                  blurRadius: 2,
-                                  offset: Offset(0, 0),
-                                  color: Colors.grey.withOpacity(0.2)
-                                )
+                                    blurRadius: 2,
+                                    offset: Offset(0, 0),
+                                    color: Colors.grey.withOpacity(0.2)),
                               ]),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [Container(
+                                width: 90,
+                                height: 120,
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(image: AssetImage(books?[index]['img']))),
+                              )],
+                            ),
+                          ),
                         ),
                       );
                     }),
