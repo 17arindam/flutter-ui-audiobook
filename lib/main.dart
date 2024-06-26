@@ -1,3 +1,4 @@
+import 'package:audiobook_app_ui/screens/detail_audio_screen.dart';
 import 'package:audiobook_app_ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
 
       ),
-      home: const HomeScreen(),
+      home: const DetailAudioScreen(),
     );
   }
 }
